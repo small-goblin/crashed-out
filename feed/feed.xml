@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet href="pretty-atom-feed.xsl" type="text/xsl"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+  <title>Crashed Out</title>
+  <subtitle>machines, computers, et cetera.</subtitle>
+  <link href="https://example.com/feed/feed.xml" rel="self" />
+  <link href="https://example.com/" />
+  <updated>2025-04-11T05:06:27Z</updated>
+  <id>https://example.com/</id>
+  <author>
+    <name>1kcrows</name>
+  </author>
+</feed>
