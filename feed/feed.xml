@@ -3,10 +3,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
   <title>Crashed Out</title>
   <subtitle>machines, computers, et cetera.</subtitle>
-  <link href="https://example.com/feed/feed.xml" rel="self" />
-  <link href="https://example.com/" />
-  <updated>2025-04-11T05:06:27Z</updated>
-  <id>https://example.com/</id>
+  <link href="https://small-goblin.github.io/crashed-out/feed/feed.xml" rel="self" />
+  <link href="https://small-goblin.github.io/crashed-out/crashed-out/" />
+  <updated>2025-04-11T05:29:56Z</updated>
+  <id>https://small-goblin.github.io/crashed-out/crashed-out/</id>
   <author>
     <name>1kcrows</name>
   </author>
