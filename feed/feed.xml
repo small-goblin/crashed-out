@@ -5,9 +5,153 @@
   <subtitle>machines, computers, et cetera.</subtitle>
   <link href="https://small-goblin.github.io/crashed-out/feed/feed.xml" rel="self" />
   <link href="https://small-goblin.github.io/crashed-out/crashed-out/" />
-  <updated>2025-04-11T05:36:05Z</updated>
+  <updated>2025-04-15T00:00:00Z</updated>
   <id>https://small-goblin.github.io/crashed-out/crashed-out/</id>
   <author>
     <name>a researcher</name>
   </author>
+  <entry>
+    <title>identifying grapth flattening</title>
+    <link href="https://small-goblin.github.io/crashed-out/blog/4_15_25/post/" />
+    <updated>2025-04-15T00:00:00Z</updated>
+    <id>https://small-goblin.github.io/crashed-out/blog/4_15_25/post/</id>
+    <content type="html">&lt;p&gt;Grapth flattening is a means of obscuring the flow of execution to prevent static review of reverse engineered code. Lets take a look at how to identify when control grapth flattening is being used.&lt;/p&gt;
+&lt;p&gt;Start by loading the sample emotet in miasm.&lt;/p&gt;
+&lt;pre class=&quot;language-python&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; sys
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; subprocess
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; graphviz
+&lt;span class=&quot;token comment&quot;&gt;# import z3&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; IPython
+
+&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; miasm&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;analysis&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;binary &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; Container
+&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; miasm&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;analysis&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;machine &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; Machine
+&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; miasm&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;core&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;locationdb &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; LocationDB&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-python&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# initsymbol table&lt;/span&gt;
+loc_db&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;LocationDB&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# as we explore, we can name more memory locations&lt;/span&gt;
+loc_db&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;add_location&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;offset&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0x405c49&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; name&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;return_zero&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+loc_db&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;add_location&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;offset&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0x4063f0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; name&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;flat_function&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-python&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;fname&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;/home/user/Desktop/samples/emotet&quot;&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# read binary file&lt;/span&gt;
+container&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;Container&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;from_stream&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token builtin&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;fname&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&#39;rb&#39;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; loc_db&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# getCPU abstraction&lt;/span&gt;
+machine&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;Machine&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;container&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;arch&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# disassembly engine&lt;/span&gt;
+mdis&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;machine&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;dis_engine&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;container&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;bin_stream&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; loc_db&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;loc_db&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The magic number of a binrary tells us what kind of file it is. This is an executable PE.&lt;/p&gt;
+&lt;p&gt;If we add the Entrypoint offset to the ImageBase address we know whereabouts the sample starts.&lt;/p&gt;
+&lt;p&gt;We can get all of this information from &#39;readpe&#39;.&lt;/p&gt;
+&lt;pre class=&quot;language-python&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# readpe -H emotet&lt;/span&gt;
+result&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;subprocess&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;run&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;readpe&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;-H&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; fname&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+result&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;    DOS Header
+        Magic number:                    0x5a4d (MZ)
+        Bytes in last page:              144
+        Pages in file:                   3
+        Relocations:                     0
+        Size of header in paragraphs:    4
+        Minimum extra paragraphs:        0
+        Maximum extra paragraphs:        65535
+        Initial (relative) SS value:     0
+        Initial SP value:                0xb8
+        Initial IP value:                0
+        Initial (relative) CS value:     0
+        Address of relocation table:     0x40
+        Overlay number:                  0
+        OEM identifier:                  0
+        OEM information:                 0
+        PE header offset:                0xc0
+    COFF/File header
+        Machine:                         0x14c IMAGE_FILE_MACHINE_I386
+        Number of sections:              4
+        Date/time stamp:                 1599761546 (Thu, 10 Sep 2020 18:12:26 UTC)
+        Symbol Table offset:             0
+        Number of symbols:               0
+        Size of optional header:         0xe0
+        Characteristi
+
+    cs:                 0x102
+        Characteristics names
+                                             IMAGE_FILE_EXECUTABLE_IMAGE
+                                             IMAGE_FILE_32BIT_MACHINE
+    Optional/Image header
+        Magic number:                    0x10b (PE32)
+        Linker major version:            12
+        Linker minor version:            0
+        Size of .text section:           0xa600
+        Size of .data section:           0x1c00
+        Size of .bss section:            0
+        Entrypoint:                      0x5c20
+        Address of .text section:        0x1000
+        Address of .data section:        0xc000
+        ImageBase:                       0x400000
+        Alignment of sections:           0x1000
+        Alignment factor:                0x200
+        Major version of required OS:    6
+        Minor version of required OS:    0
+        Major version of image:          0
+        Minor version of image:          0
+        Major version of subsystem:      6
+        Minor version of subsystem:      0
+        Size of image:                   0x10000
+        Size of headers:                 0x400
+        Checksum:                        0
+        Subsystem required:              0x2 (IMAGE_SUBSYSTEM_WINDOWS_GUI)
+        DLL characteristics:             0x8740
+        DLL characteristics names
+                                             IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE
+                                             IMAGE_DLLCHARACTERISTICS_NX_COMPAT
+                                             IMAGE_DLLCHARACTERISTICS_NO_ISOLATION
+                                             IMAGE_DLLCHARACTERISTICS_NO_SEH
+                                             IMAGE_DLLCHARACTERISTICS_TERMINAL_SERVER_AWARE
+        Size of stack to reserve:        0x100000
+        Size of stack to commit:         0x1000
+        Size of heap space to reserve:   0x100000
+        Size of heap space to commit:    0x1000
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can start exploring the control flow grapth at this calculated address.&lt;/p&gt;
+&lt;pre class=&quot;language-python&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token triple-quoted-string string&quot;&gt;&#39;&#39;&#39;
+    Entrypoint:                      0x5c20
+    ImageBase:                       0x400000
+
+&#39;&#39;&#39;&lt;/span&gt;
+
+entry_point&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0x00405c20&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# retriev eall basic blocks starting at entry point&lt;/span&gt;
+asm_cfg&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;mdis&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;dis_multiblock&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;entry_point&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# display CFG&lt;/span&gt;
+dot &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; asm_cfg&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;dot&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+gvz&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;graphviz&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Source&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;dot&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+display&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gvz&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/.11ty/image/?src=content%2Fblog%2F4_15_25%2Foutput_9_0.svg&amp;width=599&amp;format=avif&amp;via=transform 599w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/.11ty/image/?src=content%2Fblog%2F4_15_25%2Foutput_9_0.svg&amp;width=599&amp;format=webp&amp;via=transform 599w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://small-goblin.github.io/crashed-out/.11ty/image/?src=content%2Fblog%2F4_15_25%2Foutput_9_0.svg&amp;width=599&amp;format=svg&amp;via=transform&quot; alt=&quot;svg&quot; width=&quot;599&quot; height=&quot;1015&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;p&gt;Start with looking at calls and long jumps.&lt;/p&gt;
+&lt;pre class=&quot;language-python&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;offset&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0x4063f0&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# retrieve all basic blocks starting at entry point&lt;/span&gt;
+asm_cfg&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;mdis&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;dis_multiblock&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;offset&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    
+&lt;span class=&quot;token comment&quot;&gt;# display CFG&lt;/span&gt;
+dot &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; asm_cfg&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;dot&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+gvz&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;graphviz&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Source&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;dot&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# weird error will not display?&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# save to file, convert to png&lt;/span&gt;
+gvz&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;save&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;./flat_grapth.dot&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+result&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;subprocess&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;run&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;dot&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;-Tsvg&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;flat_grapth.dot&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;-o&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;flat_graph.svg&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/.11ty/image/?src=content%2Fblog%2F4_15_25%2Fflat-graph.svg&amp;width=13597&amp;format=avif&amp;via=transform 13597w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/.11ty/image/?src=content%2Fblog%2F4_15_25%2Fflat-graph.svg&amp;width=13597&amp;format=webp&amp;via=transform 13597w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://small-goblin.github.io/crashed-out/.11ty/image/?src=content%2Fblog%2F4_15_25%2Fflat-graph.svg&amp;width=13597&amp;format=svg&amp;via=transform&quot; alt=&quot;svg&quot; width=&quot;13597&quot; height=&quot;7335&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;p&gt;This CFG is &amp;quot;flattened&amp;quot; and highly complex. Which block runs is determined by a state variable-- a value in EAX.&lt;/p&gt;
+&lt;p&gt;We can determine the order of basic blocks by just running the code, or build some kind of solver to trace it statically, which we can discuss in the later posts.&lt;/p&gt;
+&lt;h2 id=&quot;sources&quot;&gt;sources&lt;/h2&gt;
+&lt;p&gt;https://www.williballenthin.com/post/2020-01-12-miasm-part-2/&lt;/p&gt;
+&lt;p&gt;https://infosecadalid.com/2021/08/27/my-introduction-to-z3-and-solving-satisfiability-problems/&lt;/p&gt;
+&lt;p&gt;https://github.com/mrphrazer/obfuscation_detection/tree/main/examples&lt;/p&gt;
+</content>
+  </entry>
 </feed>
