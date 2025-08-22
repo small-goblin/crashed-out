@@ -5,11 +5,56 @@
   <subtitle>machines, computers, et cetera.</subtitle>
   <link href="https://small-goblin.github.io/crashed-out/feed/feed.xml" rel="self" />
   <link href="https://small-goblin.github.io/crashed-out/crashed-out/" />
-  <updated>2025-04-15T00:00:00Z</updated>
+  <updated>2025-08-20T00:00:00Z</updated>
   <id>https://small-goblin.github.io/crashed-out/crashed-out/</id>
   <author>
     <name>a researcher</name>
   </author>
+  <entry>
+    <title>Visual Binary</title>
+    <link href="https://small-goblin.github.io/crashed-out/blog/8_20_25/post/" />
+    <updated>2025-08-20T00:00:00Z</updated>
+    <id>https://small-goblin.github.io/crashed-out/blog/8_20_25/post/</id>
+    <content type="html">&lt;blockquote&gt;
+&lt;p&gt;As an offhand note:&lt;br&gt;
+I wanted to make a research blog, but then only ever made one post. So I&#39;m going to make an effort to summarize some papers once in a while under the tag &amp;quot;page turner&amp;quot;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&quot;visual-binary&quot;&gt;Visual Binary&lt;/h1&gt;
+&lt;p&gt;There is something appealing about thinking of binary data as having &amp;quot;primitives.&amp;quot; If this is true, they should have patterns, and we should be able to visually distinguish these primitives. In the same way we can distinguish color primitives like red and blue. Enter binvis. The human brain is pretty good at spotting patterns and visually reasoning, so this technique is claimed to be more intuitive than reading hex dumps.&lt;/p&gt;
+&lt;h2 id=&quot;do-i-look-like-i-know-what-a-jpg-is&quot;&gt;Do I Look Like I Know What a JPG Is?&lt;/h2&gt;
+&lt;p&gt;Let&#39;s take a look at three JPGs, put through binvis...&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/content/imgs/bin1.png&quot; alt=&quot;Image&quot;&gt;&lt;br&gt;
+&lt;img src=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/content/imgs/bin2.png&quot; alt=&quot;Image&quot;&gt;&lt;br&gt;
+&lt;img src=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/content/imgs/bin3.png&quot; alt=&quot;Image&quot;&gt;&lt;/p&gt;
+&lt;p&gt;These look... similar... but let&#39;s compare them to a PNG.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/content/imgs/bin4.png&quot; alt=&quot;Image&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Still looks mostly the same. Maybe all images are primitives? Let&#39;s compare this to another primitive: text.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/content/imgs/bin5.png&quot; alt=&quot;Image&quot;&gt;&lt;/p&gt;
+&lt;p&gt;All blue. Okay, we see a pattern: what appears to be a header and then actual image data in the JPGs&#39; binvis output. Text is is a sea as blue. We can assule ELF files, code, compressed data, all have their own patterns.&lt;/p&gt;
+&lt;h2 id=&quot;sniffing-for-text&quot;&gt;Sniffing for Text&lt;/h2&gt;
+&lt;p&gt;Let&#39;s hide some text in a BMP image, then see if we can visually find this text using binvis.&lt;/p&gt;
+&lt;p&gt;First, let&#39;s look at the binvis output of the BMP before we modify it.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/content/imgs/bin_bmp_clean.png&quot; alt=&quot;Image&quot;&gt;&lt;/p&gt;
+&lt;p&gt;There is a very clear pattern to this data, so this becomes our baseline for BMP image primitives.&lt;/p&gt;
+&lt;p&gt;We can hide the hex sequence &lt;code&gt;66 6C 61 67 7B 6E 6F 77 5F 79 6F 75 5F 73 65 65 5F 6D 65 7D&lt;/code&gt; somewhere in the file, which is just ASCII &lt;code&gt;flag{now_you_see_me}&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/content/imgs/flag.png&quot; alt=&quot;Image&quot;&gt;&lt;/p&gt;
+&lt;p&gt;If we check the BMP in binvis again, we&#39;ll see an aberration in the pattern—a small blue island—which is our flag. The patterns of two different binary primitives clash!&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/content/imgs/bin_flag.png&quot; alt=&quot;Image&quot;&gt;&lt;/p&gt;
+&lt;p&gt;The flag is small and visually it doesn&#39;t make much of an impact, so it could be easy to miss. However, this is a very trivial example. Embedding a lot of text in the image would show a much larger visual disruption. Most data you&#39;d want to hide would be larger than a couple of bytes.&lt;/p&gt;
+&lt;h2 id=&quot;additional-thoughts&quot;&gt;Additional Thoughts&lt;/h2&gt;
+&lt;p&gt;How do we defeat a tool like this? Camouflage, possibly. When embedding primitives, it could be possible to encode them as another primitive or align the data in such a way that it matches the pattern of the primary primitive.&lt;/p&gt;
+&lt;h1 id=&quot;citations&quot;&gt;Citations&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;A Visual Study of Primitive Binary Fragment Types, July 4, 2010&lt;/li&gt;
+&lt;li&gt;Visual Reverse Engineering of Binary and Data Files&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;tools&quot;&gt;Tools&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;imhex - https://imhex.werwolv.net/&lt;/li&gt;
+&lt;li&gt;binvis - https://binvis.io/&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+  </entry>
   <entry>
     <title>identifying grapth flattening</title>
     <link href="https://small-goblin.github.io/crashed-out/blog/4_15_25/post/" />
