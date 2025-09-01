@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Visual Binary</title>
-		<meta name="description" content="Visually peeking at the content of binary data">
+		<title>simple analysis</title>
+		<meta name="description" content="slicing through time and space">
 		<link rel="alternate" href="/crashed-out/feed/feed.xml" type="application/atom+xml" title="Crashed Out">
 		
 		<style>/**
@@ -474,53 +474,97 @@ header {
 		<main id="skip">
 			<heading-anchors>
 				
-<h1 id="visual-binary">Visual Binary</h1>
+<h1 id="simple-analysis">simple analysis</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2025-08-20">20 August 2025</time></li>
-	<li><a href="/crashed-out/tags/page-turner/" class="post-tag">page turner</a>, </li>
+	<li><time datetime="2025-01-09">09 January 2025</time></li>
 	<li><a href="/crashed-out/tags/re/" class="post-tag">RE</a></li>
 </ul>
 
-<p>There is something appealing about thinking of binary data as having &quot;primitives.&quot; If this is true, they should have patterns, and we should be able to visually distinguish these primitives. In the same way we can distinguish color primitives like red and blue. Enter binvis. The human brain is pretty good at spotting patterns and visually reasoning, so this technique is claimed to be more intuitive than reading hex dumps.</p>
-<h2 id="do-i-look-like-i-know-what-a-jpg-is">Do I Look Like I Know What a JPG Is?</h2>
-<p>Let's take a look at three JPGs, put through binvis...</p>
-<p><picture><source type="image/avif" srcset="/crashed-out/blog/8_20_25/post/znaQSDuWa0-1060.avif 1060w"><source type="image/webp" srcset="/crashed-out/blog/8_20_25/post/znaQSDuWa0-1060.webp 1060w"><img loading="lazy" decoding="async" src="/crashed-out/blog/8_20_25/post/znaQSDuWa0-1060.png" alt="Image" width="1060" height="4240"></picture><br>
-<picture><source type="image/avif" srcset="/crashed-out/blog/8_20_25/post/5YtxnsKuwN-1060.avif 1060w"><source type="image/webp" srcset="/crashed-out/blog/8_20_25/post/5YtxnsKuwN-1060.webp 1060w"><img loading="lazy" decoding="async" src="/crashed-out/blog/8_20_25/post/5YtxnsKuwN-1060.png" alt="Image" width="1060" height="4240"></picture><br>
-<picture><source type="image/avif" srcset="/crashed-out/blog/8_20_25/post/OH4P9xk5Y7-1060.avif 1060w"><source type="image/webp" srcset="/crashed-out/blog/8_20_25/post/OH4P9xk5Y7-1060.webp 1060w"><img loading="lazy" decoding="async" src="/crashed-out/blog/8_20_25/post/OH4P9xk5Y7-1060.png" alt="Image" width="1060" height="4240"></picture></p>
-<p>These look... similar... but let's compare them to a PNG.</p>
-<p><picture><source type="image/avif" srcset="/crashed-out/blog/8_20_25/post/yU6W2F7jab-1060.avif 1060w"><source type="image/webp" srcset="/crashed-out/blog/8_20_25/post/yU6W2F7jab-1060.webp 1060w"><img loading="lazy" decoding="async" src="/crashed-out/blog/8_20_25/post/yU6W2F7jab-1060.png" alt="Image" width="1060" height="4240"></picture></p>
-<p>Still looks mostly the same, but a pattern emerges. Let's compare this to another primitive: text.</p>
-<p><picture><source type="image/avif" srcset="/crashed-out/blog/8_20_25/post/TioZmP6U71-1060.avif 1060w"><source type="image/webp" srcset="/crashed-out/blog/8_20_25/post/TioZmP6U71-1060.webp 1060w"><img loading="lazy" decoding="async" src="/crashed-out/blog/8_20_25/post/TioZmP6U71-1060.png" alt="Image" width="1060" height="4240"></picture></p>
-<p>All blue. Okay, we see a pattern: what appears to be a header and then actual image data in the JPGs' binvis output. Text is a sea of blue. We can assume ELF files, code, compressed data, all have their own patterns.</p>
-<h2 id="sniffing-for-text">Sniffing for Text</h2>
-<p>Let's hide some text in a BMP image, then see if we can visually find this text using binvis.</p>
-<p>First, let's look at the binvis output of the BMP before we modify it.</p>
-<p><picture><source type="image/avif" srcset="/crashed-out/blog/8_20_25/post/v6SFobvTfu-264.avif 264w"><source type="image/webp" srcset="/crashed-out/blog/8_20_25/post/v6SFobvTfu-264.webp 264w"><img loading="lazy" decoding="async" src="/crashed-out/blog/8_20_25/post/v6SFobvTfu-264.png" alt="Image" width="264" height="1056"></picture></p>
-<p>There is a very clear pattern to this data, so this becomes our baseline for BMP image primitives.</p>
-<p>We can hide the hex sequence <code>66 6C 61 67 7B 6E 6F 77 5F 79 6F 75 5F 73 65 65 5F 6D 65 7D</code> somewhere in the file, which is just ASCII <code>flag{now_you_see_me}</code>.</p>
-<p><picture><source type="image/avif" srcset="/crashed-out/blog/8_20_25/post/DZxZLeRhMS-572.avif 572w"><source type="image/webp" srcset="/crashed-out/blog/8_20_25/post/DZxZLeRhMS-572.webp 572w"><img loading="lazy" decoding="async" src="/crashed-out/blog/8_20_25/post/DZxZLeRhMS-572.png" alt="Image" width="572" height="60"></picture></p>
-<p>If we check the BMP in binvis again, we'll see an aberration in the pattern—a small blue island—which is our flag. The patterns of two different binary primitives clash!</p>
-<p><picture><source type="image/avif" srcset="/crashed-out/blog/8_20_25/post/z2WD40QWiP-218.avif 218w"><source type="image/webp" srcset="/crashed-out/blog/8_20_25/post/z2WD40QWiP-218.webp 218w"><img loading="lazy" decoding="async" src="/crashed-out/blog/8_20_25/post/z2WD40QWiP-218.png" alt="Image" width="218" height="578"></picture></p>
-<p>The flag is small and visually it doesn't make much of an impact, so it could be easy to miss. However, this is a very trivial example. Embedding a lot of text in the image would show a much larger visual disruption. Most data you'd want to hide would be larger than a couple of bytes.</p>
-<h2 id="additional-thoughts">Additional Thoughts</h2>
-<p>How do we defeat a tool like this? Camouflage, possibly. When embedding primitives, it could be possible to encode them as another primitive or align the data in such a way that it matches the pattern of the primary primitive.</p>
-<h1 id="citations">Citations</h1>
-<ul>
-<li>A Visual Study of Primitive Binary Fragment Types, July 4, 2010</li>
-<li>Visual Reverse Engineering of Binary and Data Files</li>
-</ul>
-<h1 id="tools">Tools</h1>
-<ul>
-<li>imhex - https://imhex.werwolv.net/</li>
-<li>binvis - https://binvis.io/</li>
-</ul>
-<blockquote>
-<p>As an offhand note:<br>
-I wanted to make a research blog, but then only ever made one post. So I'm going to make an effort to summarize some papers once in a while under the tag &quot;page turner&quot;.</p>
-</blockquote>
+<p>So we want to understand the value of a memory location within a given basic block of a CFG? No problem. Enter, value slicing</p>
+<p>Consider the following</p>
+<pre class="language-c" tabindex="0"><code class="language-c"><span class="token class-name">int64_t</span> four<span class="token punctuation">,</span>
+<span class="token class-name">int32_t</span> five<span class="token punctuation">,</span>
+<span class="token class-name">int64_t</span> six<span class="token punctuation">,</span>
+<span class="token class-name">int32_t</span> seven<span class="token punctuation">,</span>
+<span class="token class-name">int64_t</span> eight<span class="token punctuation">,</span>
+<span class="token class-name">int32_t</span> nine
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<ul class="links-nextprev"><li class="links-nextprev-prev">← Previous<br> <a href="/crashed-out/blog/4_15_25/post/">identifying grapth flattening</a></li>
+<span class="token keyword">void</span> 
+<span class="token function">app_main</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> rc <span class="token operator">=</span> <span class="token function">bigcall</span><span class="token punctuation">(</span><span class="token number">101</span><span class="token punctuation">,</span> <span class="token number">102</span><span class="token punctuation">,</span> <span class="token number">103</span><span class="token punctuation">,</span> <span class="token number">104</span><span class="token punctuation">,</span> <span class="token number">105</span><span class="token punctuation">,</span> <span class="token number">106</span><span class="token punctuation">,</span> <span class="token number">107</span><span class="token punctuation">,</span> <span class="token number">108</span><span class="token punctuation">,</span> <span class="token number">109</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"bigcall() return %d\n"</span><span class="token punctuation">,</span>rc<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 945</span>
+<span class="token punctuation">}</span></code></pre>
+<p>and then the asm of the bigcall function:</p>
+<pre class="language-asm" tabindex="0"><code class="language-asm">Dump of assembler code for function bigcall:
+   0x42005052 <+0>:	addi	sp,sp,-16
+   0x42005054 <+2>:	sw	s0,0(sp)
+   0x42005056 <+4>:	sw	ra,4(sp)
+   0x42005058 <+6>:	addi	s0,sp,16
+   0x4200505a <+8>:	add	a0,a0,a1
+   0x4200505c <+10>:	add	a0,a0,a3
+   0x4200505e <+12>:	add	a0,a0,a4
+   0x42005060 <+14>:	add	a0,a0,a6
+   0x42005062 <+16>:	add	a0,a0,a7
+   0x42005064 <+18>:	lw	t0,4(s0)
+   0x42005068 <+22>:	add	a0,a0,t0
+   0x4200506a <+24>:	lw	t0,8(s0)
+   0x4200506e <+28>:	add	a0,a0,t0
+   0x42005070 <+30>:	lw	t0,16(s0)
+   0x42005074 <+34>:	add	a0,a0,t0
+   0x42005076 <+36>:	sw	zero,8(sp)
+   0x42005078 <+38>:	lw	ra,4(sp)
+   0x4200507a <+40>:	lw	s0,0(sp)
+   0x4200507c <+42>:	addi	sp,sp,16
+   0x4200507e <+44>:	ret
+End of assembler dump.</code></pre>
+<p>This function is one basic block. We can use value slicing to figure out the return value (register a0). Start at step 1 and work towards step 12.</p>
+<p>Dump of assembler code for function bigcall:<br>
+0x42005052 &lt;+0&gt;: addi sp,sp,-16<br>
+0x42005054 &lt;+2&gt;: sw s0,0(sp)<br>
+0x42005056 &lt;+4&gt;: sw ra,4(sp)<br>
+0x42005058 &lt;+6&gt;: addi s0,sp,16</p>
+<p><strong>(step 12, final) a0 = (((((((a0 + a1) + a3) + a4) + a6) + a7) + 4(sp+16)) + 8(sp+16)) + 16(sp+16)</strong></p>
+<p>0x4200505a &lt;+8&gt;: add a0,a0,a1</p>
+<p><strong>(step 11) a0 = (((((((a0 + a1) + a3) + a4) + a6) + a7) + 4(s0)) + 8(s0)) + 16(s0)</strong></p>
+<p>0x4200505c &lt;+10&gt;: add a0,a0,a3</p>
+<p><strong>(step 10) a0 = ((((((a0 + a3) + a4) + a6) + a7) + 4(s0)) + 8(s0)) + 16(s0)</strong></p>
+<p>0x4200505e &lt;+12&gt;: add a0,a0,a4</p>
+<p><strong>(step 9) a0 = (((((a0 + a4) + a6) + a7) + 4(s0)) + 8(s0)) + 16(s0)</strong></p>
+<p>0x42005060 &lt;+14&gt;: add a0,a0,a6</p>
+<p><strong>(step 8) a0 = ((((a0 + a6) + a7) + 4(s0)) + 8(s0)) + 16(s0)</strong></p>
+<p>0x42005062 &lt;+16&gt;: add a0,a0,a7</p>
+<p><strong>(step 7) a0 = (((a0 + a7) + 4(s0)) + 8(s0)) + 16(s0)</strong></p>
+<p>0x42005064 &lt;+18&gt;: lw t0,4(s0)****</p>
+<p><strong>(step 6) a0 = ((a0 + 4(s0)) + 8(s0)) + 16(s0)</strong></p>
+<p>0x42005068 &lt;+22&gt;: add a0,a0,t0</p>
+<p><strong>(step 5) a0 = ((a0+t0)+8(s0)) + 16(s0)</strong></p>
+<p>0x4200506a &lt;+24&gt;: lw t0,8(s0)</p>
+<p><strong>(step 4) a0 = (a0+8(s0)) + 16(s0)</strong></p>
+<p>0x4200506e &lt;+28&gt;: add a0,a0,t0</p>
+<p><strong>(step 3) a0 = (a0+t0) + 16(s0)</strong></p>
+<p>0x42005070 &lt;+30&gt;: lw t0,16(s0)</p>
+<p><strong>(step 2) a0 = a0 + 16(s0)</strong></p>
+<p>0x42005074 &lt;+34&gt;: add a0,a0,t0</p>
+<p><strong>(start here, step 1) a0 = a0 + t0</strong></p>
+<p>0x42005076 &lt;+36&gt;: sw zero,8(sp)<br>
+0x42005078 &lt;+38&gt;: lw ra,4(sp)<br>
+0x4200507a &lt;+40&gt;: lw s0,0(sp)<br>
+0x4200507c &lt;+42&gt;: addi sp,sp,16<br>
+0x4200507e &lt;+44&gt;: ret<br>
+End of assembler dump.</p>
+<p>So our return value is the calculation <code>a0 = (((((((a0 + a1) + a3) + a4) + a6) + a7) + 4(sp+16)) + 8(sp+16)) + 16(sp+16)</code></p>
+<p>The calling convention for riscv is pass-by-register (a0-a7) and then switches to storing values on the stack when we run out of registers. Considering bigcall takes 9 parameters, and just adds them up, this calculation makes sense.</p>
+<p>This is pretty useful in basic taint analysis. Suppose you have some known dangerous function, that's exploitable when a parameter meets certain criterial. You can trace that parameter back to determine if it includes user input. This is a kind of source (user input) and sink (dangerous operation) methodology.</p>
+<p>Citations</p>
+<ul>
+<li>https://asm-docs.microagi.org/riscv/html/riscv-asm.html</li>
+</ul>
+
+<ul class="links-nextprev"><li class="links-nextprev-next">Next →<br><a href="/crashed-out/blog/4_15_25/post/">identifying grapth flattening</a></li>
 </ul>
 
 			</heading-anchors>
@@ -529,7 +573,7 @@ I wanted to make a research blog, but then only ever made one post. So I'm going
 		<footer>
 		</footer>
 
-		<!-- This page `/blog/8_20_25/post/` was built on 2025-09-01T05:47:32.626Z -->
+		<!-- This page `/blog/9_1_25/post/` was built on 2025-09-01T05:47:32.630Z -->
 		<script type="module" src="/crashed-out/dist/xbxy_EL6cU.js"></script>
 	</body>
 </html>

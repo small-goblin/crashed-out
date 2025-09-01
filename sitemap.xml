@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 	
 	<url>
+		<loc>https://small-goblin.github.io/crashed-out/blog/9_1_25/post/</loc>
+		<lastmod>2025-01-09</lastmod>
+	</url>
+	
+	<url>
 		<loc>https://small-goblin.github.io/crashed-out/blog/</loc>
 		<lastmod>2025-03-07</lastmod>
 	</url>
@@ -33,6 +38,6 @@
 	
 	<url>
 		<loc>https://small-goblin.github.io/crashed-out/feed/feed.xml</loc>
-		<lastmod>2025-08-22</lastmod>
+		<lastmod>2025-09-01</lastmod>
 	</url>
 </urlset>

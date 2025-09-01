@@ -198,4 +198,93 @@ result&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;subprocess&lt;s
 &lt;p&gt;https://github.com/mrphrazer/obfuscation_detection/tree/main/examples&lt;/p&gt;
 </content>
   </entry>
+  <entry>
+    <title>simple analysis</title>
+    <link href="https://small-goblin.github.io/crashed-out/blog/9_1_25/post/" />
+    <updated>2025-01-09T00:00:00Z</updated>
+    <id>https://small-goblin.github.io/crashed-out/blog/9_1_25/post/</id>
+    <content type="html">&lt;p&gt;So we want to understand the value of a memory location within a given basic block of a CFG? No problem. Enter, value slicing&lt;/p&gt;
+&lt;p&gt;Consider the following&lt;/p&gt;
+&lt;pre class=&quot;language-c&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-c&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;int64_t&lt;/span&gt; four&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;token class-name&quot;&gt;int32_t&lt;/span&gt; five&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;token class-name&quot;&gt;int64_t&lt;/span&gt; six&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;token class-name&quot;&gt;int32_t&lt;/span&gt; seven&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;token class-name&quot;&gt;int64_t&lt;/span&gt; eight&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;token class-name&quot;&gt;int32_t&lt;/span&gt; nine
+&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; 
+&lt;span class=&quot;token function&quot;&gt;app_main&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt; rc &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;bigcall&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;101&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;102&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;103&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;104&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;105&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;106&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;107&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;108&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;109&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  
+  &lt;span class=&quot;token function&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;bigcall() return %d&#92;n&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;rc&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// 945&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;and then the asm of the bigcall function:&lt;/p&gt;
+&lt;pre class=&quot;language-asm&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-asm&quot;&gt;Dump of assembler code for function bigcall:
+   0x42005052 &lt;+0&gt;:	addi	sp,sp,-16
+   0x42005054 &lt;+2&gt;:	sw	s0,0(sp)
+   0x42005056 &lt;+4&gt;:	sw	ra,4(sp)
+   0x42005058 &lt;+6&gt;:	addi	s0,sp,16
+   0x4200505a &lt;+8&gt;:	add	a0,a0,a1
+   0x4200505c &lt;+10&gt;:	add	a0,a0,a3
+   0x4200505e &lt;+12&gt;:	add	a0,a0,a4
+   0x42005060 &lt;+14&gt;:	add	a0,a0,a6
+   0x42005062 &lt;+16&gt;:	add	a0,a0,a7
+   0x42005064 &lt;+18&gt;:	lw	t0,4(s0)
+   0x42005068 &lt;+22&gt;:	add	a0,a0,t0
+   0x4200506a &lt;+24&gt;:	lw	t0,8(s0)
+   0x4200506e &lt;+28&gt;:	add	a0,a0,t0
+   0x42005070 &lt;+30&gt;:	lw	t0,16(s0)
+   0x42005074 &lt;+34&gt;:	add	a0,a0,t0
+   0x42005076 &lt;+36&gt;:	sw	zero,8(sp)
+   0x42005078 &lt;+38&gt;:	lw	ra,4(sp)
+   0x4200507a &lt;+40&gt;:	lw	s0,0(sp)
+   0x4200507c &lt;+42&gt;:	addi	sp,sp,16
+   0x4200507e &lt;+44&gt;:	ret
+End of assembler dump.&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This function is one basic block. We can use value slicing to figure out the return value (register a0). Start at step 1 and work towards step 12.&lt;/p&gt;
+&lt;p&gt;Dump of assembler code for function bigcall:&lt;br&gt;
+0x42005052 &amp;lt;+0&amp;gt;: addi sp,sp,-16&lt;br&gt;
+0x42005054 &amp;lt;+2&amp;gt;: sw s0,0(sp)&lt;br&gt;
+0x42005056 &amp;lt;+4&amp;gt;: sw ra,4(sp)&lt;br&gt;
+0x42005058 &amp;lt;+6&amp;gt;: addi s0,sp,16&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;(step 12, final) a0 = (((((((a0 + a1) + a3) + a4) + a6) + a7) + 4(sp+16)) + 8(sp+16)) + 16(sp+16)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;0x4200505a &amp;lt;+8&amp;gt;: add a0,a0,a1&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;(step 11) a0 = (((((((a0 + a1) + a3) + a4) + a6) + a7) + 4(s0)) + 8(s0)) + 16(s0)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;0x4200505c &amp;lt;+10&amp;gt;: add a0,a0,a3&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;(step 10) a0 = ((((((a0 + a3) + a4) + a6) + a7) + 4(s0)) + 8(s0)) + 16(s0)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;0x4200505e &amp;lt;+12&amp;gt;: add a0,a0,a4&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;(step 9) a0 = (((((a0 + a4) + a6) + a7) + 4(s0)) + 8(s0)) + 16(s0)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;0x42005060 &amp;lt;+14&amp;gt;: add a0,a0,a6&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;(step 8) a0 = ((((a0 + a6) + a7) + 4(s0)) + 8(s0)) + 16(s0)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;0x42005062 &amp;lt;+16&amp;gt;: add a0,a0,a7&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;(step 7) a0 = (((a0 + a7) + 4(s0)) + 8(s0)) + 16(s0)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;0x42005064 &amp;lt;+18&amp;gt;: lw t0,4(s0)****&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;(step 6) a0 = ((a0 + 4(s0)) + 8(s0)) + 16(s0)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;0x42005068 &amp;lt;+22&amp;gt;: add a0,a0,t0&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;(step 5) a0 = ((a0+t0)+8(s0)) + 16(s0)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;0x4200506a &amp;lt;+24&amp;gt;: lw t0,8(s0)&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;(step 4) a0 = (a0+8(s0)) + 16(s0)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;0x4200506e &amp;lt;+28&amp;gt;: add a0,a0,t0&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;(step 3) a0 = (a0+t0) + 16(s0)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;0x42005070 &amp;lt;+30&amp;gt;: lw t0,16(s0)&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;(step 2) a0 = a0 + 16(s0)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;0x42005074 &amp;lt;+34&amp;gt;: add a0,a0,t0&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;(start here, step 1) a0 = a0 + t0&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;0x42005076 &amp;lt;+36&amp;gt;: sw zero,8(sp)&lt;br&gt;
+0x42005078 &amp;lt;+38&amp;gt;: lw ra,4(sp)&lt;br&gt;
+0x4200507a &amp;lt;+40&amp;gt;: lw s0,0(sp)&lt;br&gt;
+0x4200507c &amp;lt;+42&amp;gt;: addi sp,sp,16&lt;br&gt;
+0x4200507e &amp;lt;+44&amp;gt;: ret&lt;br&gt;
+End of assembler dump.&lt;/p&gt;
+&lt;p&gt;So our return value is the calculation &lt;code&gt;a0 = (((((((a0 + a1) + a3) + a4) + a6) + a7) + 4(sp+16)) + 8(sp+16)) + 16(sp+16)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;The calling convention for riscv is pass-by-register (a0-a7) and then switches to storing values on the stack when we run out of registers. Considering bigcall takes 9 parameters, and just adds them up, this calculation makes sense.&lt;/p&gt;
+&lt;p&gt;This is pretty useful in basic taint analysis. Suppose you have some known dangerous function, that&#39;s exploitable when a parameter meets certain criterial. You can trace that parameter back to determine if it includes user input. This is a kind of source (user input) and sink (dangerous operation) methodology.&lt;/p&gt;
+&lt;p&gt;Citations&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;https://asm-docs.microagi.org/riscv/html/riscv-asm.html&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+  </entry>
 </feed>
