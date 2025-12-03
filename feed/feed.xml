@@ -3,24 +3,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
   <title>Crashed Out</title>
   <subtitle>machines, computers, et cetera.</subtitle>
-  <link href="https://small-goblin.github.io/crashed-out/feed/feed.xml" rel="self" />
-  <link href="https://small-goblin.github.io/crashed-out/crashed-out/" />
+  <link href="https://crashedout.dev/crashed-out/feed/feed.xml" rel="self" />
+  <link href="https://crashedout.dev/crashed-out/" />
   <updated>2025-11-25T00:00:00Z</updated>
-  <id>https://small-goblin.github.io/crashed-out/crashed-out/</id>
+  <id>https://crashedout.dev/crashed-out/</id>
   <author>
     <name>a researcher</name>
   </author>
   <entry>
     <title>injections can&#39;t be that easy</title>
-    <link href="https://small-goblin.github.io/crashed-out/blog/11_25_25/post/" />
+    <link href="https://crashedout.dev/crashed-out/blog/11_25_25/post/" />
     <updated>2025-11-25T00:00:00Z</updated>
-    <id>https://small-goblin.github.io/crashed-out/blog/11_25_25/post/</id>
+    <id>https://crashedout.dev/crashed-out/blog/11_25_25/post/</id>
     <content type="html">&lt;p&gt;Ok so I&#39;ve been seeing a lot of stuff on prompt injection. From papers, to ctfs. But I haven&#39;t seen any in the wild.&lt;/p&gt;
 &lt;p&gt;How often does prompt injection happen?&lt;/p&gt;
 &lt;p&gt;How easy is to make an agent that&#39;s accidentally vulnerable to prompt injection?&lt;/p&gt;
 &lt;p&gt;Recently I came across a platform called sim.ai. It&#39;s a no code solution to make agents that do... stuff? It&#39;s supposed to make it easy to make agents. There&#39;s a lot of in-app tool options but most of them seem to be behind an api pay wall. However, if you have some experience in beating applications until they work you can set up a very limited, self hosted, dev server. And I stress, limited, because again it seems like most of the functionality is pay walled behind cloud-only APIs.&lt;/p&gt;
 &lt;p&gt;One you get sim running locally (good luck, it sucks, &lt;a href=&quot;https://github.com/simstudioai/sim/issues/1726&quot;&gt;see my post here on this issue.&lt;/a&gt;) we can construct a basic chat bot that has some memory.&lt;/p&gt;
-&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/11_25_25/post/D5johoUiwx-2034.avif 2034w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/11_25_25/post/D5johoUiwx-2034.webp 2034w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://small-goblin.github.io/crashed-out/blog/11_25_25/post/D5johoUiwx-2034.png&quot; alt=&quot;Image&quot; width=&quot;2034&quot; height=&quot;524&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/11_25_25/post/D5johoUiwx-2034.avif 2034w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/11_25_25/post/D5johoUiwx-2034.webp 2034w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://crashedout.dev/crashed-out/blog/11_25_25/post/D5johoUiwx-2034.png&quot; alt=&quot;Image&quot; width=&quot;2034&quot; height=&quot;524&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
 &lt;p&gt;Memory is an important part of a chat bot. Usually this will include chat history, but a lot of other stuff gets folded into memory. Output from MCP tools, snippets from documents, system and user prompts, and anything else the agent needs for context.&lt;/p&gt;
 &lt;p&gt;This provides a lot of different opportunities to place a prompt injection. Maybe a maldoc that gets folded into the document embedding database, or maybe over multiple messages the course of the chat history, or a stealthy mcp server with embedded prompts.&lt;/p&gt;
 &lt;p&gt;Consider this system prompt:&lt;/p&gt;
@@ -79,7 +79,7 @@ Unfortunately, since this is the first message &lt;span class=&quot;token keywor
 &lt;li&gt;hallucination detection (looks like it does RAG lookups to double check responses)&lt;/li&gt;
 &lt;li&gt;PII detection (looks like it uses &lt;a href=&quot;https://microsoft.github.io/presidio/&quot;&gt;presidio&lt;/a&gt;)&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/11_25_25/post/NSGxeCt-lU-256.avif 256w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/11_25_25/post/NSGxeCt-lU-256.webp 256w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://small-goblin.github.io/crashed-out/blog/11_25_25/post/NSGxeCt-lU-256.png&quot; alt=&quot;Image&quot; width=&quot;256&quot; height=&quot;596&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/11_25_25/post/NSGxeCt-lU-256.avif 256w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/11_25_25/post/NSGxeCt-lU-256.webp 256w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://crashedout.dev/crashed-out/blog/11_25_25/post/NSGxeCt-lU-256.png&quot; alt=&quot;Image&quot; width=&quot;256&quot; height=&quot;596&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
 &lt;p&gt;This might be a false sense of security. I have serious doubts how this feature works.&lt;/p&gt;
 &lt;p&gt;Suppose we have the system prompt:&lt;/p&gt;
 &lt;pre class=&quot;language-sh&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;You are a general chatbot that provides informative responses to questions. 
@@ -98,7 +98,7 @@ Chat History:
 &lt;p&gt;Hard to say, AI systems aren&#39;t deterministic.&lt;/p&gt;
 &lt;p&gt;I&#39;d love to test it &lt;a href=&quot;https://github.com/simstudioai/sim/issues/2125&quot;&gt;if I could get it to work.&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Or if your local model is an idiot like llama3.2 it&#39;ll just give you the secret.&lt;/p&gt;
-&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/11_25_25/post/FkeKzrSuZu-518.avif 518w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/11_25_25/post/FkeKzrSuZu-518.webp 518w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://small-goblin.github.io/crashed-out/blog/11_25_25/post/FkeKzrSuZu-518.png&quot; alt=&quot;Image&quot; width=&quot;518&quot; height=&quot;635&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/11_25_25/post/FkeKzrSuZu-518.avif 518w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/11_25_25/post/FkeKzrSuZu-518.webp 518w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://crashedout.dev/crashed-out/blog/11_25_25/post/FkeKzrSuZu-518.png&quot; alt=&quot;Image&quot; width=&quot;518&quot; height=&quot;635&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
 &lt;p&gt;Check out these by the way:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://www.wiz.io/blog/prompt-airlines-ai-security-challenge&quot;&gt;Prompt Airlines CTF&lt;/a&gt;&lt;/li&gt;
@@ -108,42 +108,42 @@ Chat History:
   </entry>
   <entry>
     <title>queen city</title>
-    <link href="https://small-goblin.github.io/crashed-out/blog/11_7_25/post/" />
+    <link href="https://crashedout.dev/crashed-out/blog/11_7_25/post/" />
     <updated>2025-11-07T00:00:00Z</updated>
-    <id>https://small-goblin.github.io/crashed-out/blog/11_7_25/post/</id>
+    <id>https://crashedout.dev/crashed-out/blog/11_7_25/post/</id>
     <content type="html">&lt;p&gt;On a whim I volunteered to create content for the kali linux village for queen city con&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://small-goblin.github.io/crashed-out/pdfs/binwalk_lab.pdf&quot;&gt;Analyzing Firmware With Binwalk&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://small-goblin.github.io/crashed-out/pdfs/nuclei_lab.pdf&quot;&gt;Discovering Vulnerabilities With Nuclei&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://crashedout.dev/crashed-out/pdfs/binwalk_lab.pdf&quot;&gt;Analyzing Firmware With Binwalk&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://crashedout.dev/crashed-out/pdfs/nuclei_lab.pdf&quot;&gt;Discovering Vulnerabilities With Nuclei&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;These are easy introductions to two tools I get a lot of millage out of. You don&#39;t &lt;em&gt;need&lt;/em&gt; kali and could install these on any distro, but should be preinstalled on standard kali installs.&lt;/p&gt;
 </content>
   </entry>
   <entry>
     <title>visual binary</title>
-    <link href="https://small-goblin.github.io/crashed-out/blog/8_20_25/post/" />
+    <link href="https://crashedout.dev/crashed-out/blog/8_20_25/post/" />
     <updated>2025-08-20T00:00:00Z</updated>
-    <id>https://small-goblin.github.io/crashed-out/blog/8_20_25/post/</id>
+    <id>https://crashedout.dev/crashed-out/blog/8_20_25/post/</id>
     <content type="html">&lt;p&gt;There is something appealing about thinking of binary data as having &amp;quot;primitives.&amp;quot; If this is true, they should have patterns, and we should be able to visually distinguish these primitives. In the same way we can distinguish color primitives like red and blue. Enter binvis. The human brain is pretty good at spotting patterns and visually reasoning, so this technique is claimed to be more intuitive than reading hex dumps.&lt;/p&gt;
 &lt;h2 id=&quot;do-i-look-like-i-know-what-a-jpg-is&quot;&gt;Do I Look Like I Know What a JPG Is?&lt;/h2&gt;
 &lt;p&gt;Let&#39;s take a look at three JPGs, put through binvis...&lt;/p&gt;
-&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/znaQSDuWa0-1060.avif 1060w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/znaQSDuWa0-1060.webp 1060w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/znaQSDuWa0-1060.png&quot; alt=&quot;Image&quot; width=&quot;1060&quot; height=&quot;4240&quot;&gt;&lt;/picture&gt;&lt;br&gt;
-&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/5YtxnsKuwN-1060.avif 1060w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/5YtxnsKuwN-1060.webp 1060w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/5YtxnsKuwN-1060.png&quot; alt=&quot;Image&quot; width=&quot;1060&quot; height=&quot;4240&quot;&gt;&lt;/picture&gt;&lt;br&gt;
-&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/OH4P9xk5Y7-1060.avif 1060w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/OH4P9xk5Y7-1060.webp 1060w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/OH4P9xk5Y7-1060.png&quot; alt=&quot;Image&quot; width=&quot;1060&quot; height=&quot;4240&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/znaQSDuWa0-1060.avif 1060w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/znaQSDuWa0-1060.webp 1060w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/znaQSDuWa0-1060.png&quot; alt=&quot;Image&quot; width=&quot;1060&quot; height=&quot;4240&quot;&gt;&lt;/picture&gt;&lt;br&gt;
+&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/5YtxnsKuwN-1060.avif 1060w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/5YtxnsKuwN-1060.webp 1060w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/5YtxnsKuwN-1060.png&quot; alt=&quot;Image&quot; width=&quot;1060&quot; height=&quot;4240&quot;&gt;&lt;/picture&gt;&lt;br&gt;
+&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/OH4P9xk5Y7-1060.avif 1060w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/OH4P9xk5Y7-1060.webp 1060w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/OH4P9xk5Y7-1060.png&quot; alt=&quot;Image&quot; width=&quot;1060&quot; height=&quot;4240&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
 &lt;p&gt;These look... similar... but let&#39;s compare them to a PNG.&lt;/p&gt;
-&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/yU6W2F7jab-1060.avif 1060w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/yU6W2F7jab-1060.webp 1060w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/yU6W2F7jab-1060.png&quot; alt=&quot;Image&quot; width=&quot;1060&quot; height=&quot;4240&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/yU6W2F7jab-1060.avif 1060w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/yU6W2F7jab-1060.webp 1060w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/yU6W2F7jab-1060.png&quot; alt=&quot;Image&quot; width=&quot;1060&quot; height=&quot;4240&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
 &lt;p&gt;Still looks mostly the same, but a pattern emerges. Let&#39;s compare this to another primitive: text.&lt;/p&gt;
-&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/TioZmP6U71-1060.avif 1060w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/TioZmP6U71-1060.webp 1060w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/TioZmP6U71-1060.png&quot; alt=&quot;Image&quot; width=&quot;1060&quot; height=&quot;4240&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/TioZmP6U71-1060.avif 1060w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/TioZmP6U71-1060.webp 1060w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/TioZmP6U71-1060.png&quot; alt=&quot;Image&quot; width=&quot;1060&quot; height=&quot;4240&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
 &lt;p&gt;All blue. Okay, we see a pattern: what appears to be a header and then actual image data in the JPGs&#39; binvis output. Text is a sea of blue. We can assume ELF files, code, compressed data, all have their own patterns.&lt;/p&gt;
 &lt;h2 id=&quot;sniffing-for-text&quot;&gt;Sniffing for Text&lt;/h2&gt;
 &lt;p&gt;Let&#39;s hide some text in a BMP image, then see if we can visually find this text using binvis.&lt;/p&gt;
 &lt;p&gt;First, let&#39;s look at the binvis output of the BMP before we modify it.&lt;/p&gt;
-&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/v6SFobvTfu-264.avif 264w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/v6SFobvTfu-264.webp 264w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/v6SFobvTfu-264.png&quot; alt=&quot;Image&quot; width=&quot;264&quot; height=&quot;1056&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/v6SFobvTfu-264.avif 264w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/v6SFobvTfu-264.webp 264w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/v6SFobvTfu-264.png&quot; alt=&quot;Image&quot; width=&quot;264&quot; height=&quot;1056&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
 &lt;p&gt;There is a very clear pattern to this data, so this becomes our baseline for BMP image primitives.&lt;/p&gt;
 &lt;p&gt;We can hide the hex sequence &lt;code&gt;66 6C 61 67 7B 6E 6F 77 5F 79 6F 75 5F 73 65 65 5F 6D 65 7D&lt;/code&gt; somewhere in the file, which is just ASCII &lt;code&gt;flag{now_you_see_me}&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/DZxZLeRhMS-572.avif 572w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/DZxZLeRhMS-572.webp 572w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/DZxZLeRhMS-572.png&quot; alt=&quot;Image&quot; width=&quot;572&quot; height=&quot;60&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/DZxZLeRhMS-572.avif 572w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/DZxZLeRhMS-572.webp 572w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/DZxZLeRhMS-572.png&quot; alt=&quot;Image&quot; width=&quot;572&quot; height=&quot;60&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
 &lt;p&gt;If we check the BMP in binvis again, we&#39;ll see an aberration in the pattern—a small blue island—which is our flag. The patterns of two different binary primitives clash!&lt;/p&gt;
-&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/z2WD40QWiP-218.avif 218w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/z2WD40QWiP-218.webp 218w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://small-goblin.github.io/crashed-out/blog/8_20_25/post/z2WD40QWiP-218.png&quot; alt=&quot;Image&quot; width=&quot;218&quot; height=&quot;578&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/z2WD40QWiP-218.avif 218w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/z2WD40QWiP-218.webp 218w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://crashedout.dev/crashed-out/blog/8_20_25/post/z2WD40QWiP-218.png&quot; alt=&quot;Image&quot; width=&quot;218&quot; height=&quot;578&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
 &lt;p&gt;The flag is small and visually it doesn&#39;t make much of an impact, so it could be easy to miss. However, this is a very trivial example. Embedding a lot of text in the image would show a much larger visual disruption. Most data you&#39;d want to hide would be larger than a couple of bytes.&lt;/p&gt;
 &lt;h2 id=&quot;additional-thoughts&quot;&gt;Additional Thoughts&lt;/h2&gt;
 &lt;p&gt;How do we defeat a tool like this? Camouflage, possibly. When embedding primitives, it could be possible to encode them as another primitive or align the data in such a way that it matches the pattern of the primary primitive.&lt;/p&gt;
@@ -165,9 +165,9 @@ I wanted to make a research blog, but then only ever made one post. So I&#39;m g
   </entry>
   <entry>
     <title>identifying grapth flattening</title>
-    <link href="https://small-goblin.github.io/crashed-out/blog/4_15_25/post/" />
+    <link href="https://crashedout.dev/crashed-out/blog/4_15_25/post/" />
     <updated>2025-04-15T00:00:00Z</updated>
-    <id>https://small-goblin.github.io/crashed-out/blog/4_15_25/post/</id>
+    <id>https://crashedout.dev/crashed-out/blog/4_15_25/post/</id>
     <content type="html">&lt;p&gt;Grapth flattening is a means of obscuring the flow of execution to prevent static review of reverse engineered code. Lets take a look at how to identify when control grapth flattening is being used.&lt;/p&gt;
 &lt;p&gt;Start by loading the sample emotet in miasm.&lt;/p&gt;
 &lt;pre class=&quot;language-python&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; sys
@@ -282,7 +282,7 @@ asm_cfg&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;mdis&lt;span c
 dot &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; asm_cfg&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;dot&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
 gvz&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;graphviz&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Source&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;dot&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
 display&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gvz&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/4_15_25/post/YU5OnC168T-449.avif 449w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/4_15_25/post/YU5OnC168T-449.webp 449w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://small-goblin.github.io/crashed-out/blog/4_15_25/post/YU5OnC168T-449.svg&quot; alt=&quot;alt text&quot; width=&quot;449&quot; height=&quot;761&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/4_15_25/post/YU5OnC168T-449.avif 449w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/4_15_25/post/YU5OnC168T-449.webp 449w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://crashedout.dev/crashed-out/blog/4_15_25/post/YU5OnC168T-449.svg&quot; alt=&quot;alt text&quot; width=&quot;449&quot; height=&quot;761&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
 &lt;p&gt;Start with looking at calls and long jumps.&lt;/p&gt;
 &lt;pre class=&quot;language-python&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;offset&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0x4063f0&lt;/span&gt;
 
@@ -298,7 +298,7 @@ gvz&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;graphviz&lt;span c
 gvz&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;save&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;./flat_grapth.dot&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
 
 result&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;subprocess&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;run&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;dot&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;-Tsvg&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;flat_grapth.dot&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;-o&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;flat_graph.svg&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/4_15_25/post/SY8BR94uD2-13597.avif 13597w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://small-goblin.github.io/crashed-out/blog/4_15_25/post/SY8BR94uD2-13597.webp 13597w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://small-goblin.github.io/crashed-out/blog/4_15_25/post/SY8BR94uD2-13597.png&quot; alt=&quot;alt text&quot; width=&quot;13597&quot; height=&quot;7335&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
+&lt;p&gt;&lt;picture&gt;&lt;source type=&quot;image/avif&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/4_15_25/post/SY8BR94uD2-13597.avif 13597w&quot;&gt;&lt;source type=&quot;image/webp&quot; srcset=&quot;https://crashedout.dev/crashed-out/blog/4_15_25/post/SY8BR94uD2-13597.webp 13597w&quot;&gt;&lt;img loading=&quot;lazy&quot; decoding=&quot;async&quot; src=&quot;https://crashedout.dev/crashed-out/blog/4_15_25/post/SY8BR94uD2-13597.png&quot; alt=&quot;alt text&quot; width=&quot;13597&quot; height=&quot;7335&quot;&gt;&lt;/picture&gt;&lt;/p&gt;
 &lt;p&gt;This CFG is &amp;quot;flattened&amp;quot; and highly complex. Which block runs is determined by a state variable-- a value in EAX.&lt;/p&gt;
 &lt;p&gt;We can determine the order of basic blocks by just running the code, or build some kind of solver to trace it statically, which we can discuss in the later posts.&lt;/p&gt;
 &lt;h2 id=&quot;sources&quot;&gt;sources&lt;/h2&gt;
@@ -309,9 +309,9 @@ result&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;subprocess&lt;s
   </entry>
   <entry>
     <title>simple analysis</title>
-    <link href="https://small-goblin.github.io/crashed-out/blog/9_1_25/post/" />
+    <link href="https://crashedout.dev/crashed-out/blog/9_1_25/post/" />
     <updated>2025-01-09T00:00:00Z</updated>
-    <id>https://small-goblin.github.io/crashed-out/blog/9_1_25/post/</id>
+    <id>https://crashedout.dev/crashed-out/blog/9_1_25/post/</id>
     <content type="html">&lt;p&gt;So we want to understand the value of a memory location within a given basic block of a CFG? No problem. Enter, value slicing&lt;/p&gt;
 &lt;p&gt;Consider the following&lt;/p&gt;
 &lt;pre class=&quot;language-c&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-c&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;int64_t&lt;/span&gt; four&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
