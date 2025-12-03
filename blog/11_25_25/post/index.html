@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>injections can&#39;t be that easy</title>
 		<meta name="description" content="unless...">
-		<link rel="alternate" href="/crashed-out/feed/feed.xml" type="application/atom+xml" title="Crashed Out">
+		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="Crashed Out">
 		
 		<style>/**
  * okaidia theme for JavaScript, CSS and HTML
@@ -459,14 +459,14 @@ header {
 		<a href="#skip" class="visually-hidden">Skip to main content</a>
 
 		<header>
-			<a href="/crashed-out/" class="home-link">Crashed Out</a>
+			<a href="/" class="home-link">Crashed Out</a>
 			<nav>
 				<h2 class="visually-hidden" id="top-level-navigation-menu">Top level navigation menu</h2>
 				<ul class="nav">
-					<li class="nav-item"><a href="/crashed-out/">Home</a></li>
-					<li class="nav-item"><a href="/crashed-out/blog/">Archive</a></li>
-					<li class="nav-item"><a href="/crashed-out/about/">About</a></li>
-					<li class="nav-item"><a href="/crashed-out/feed/feed.xml">Feed</a></li>
+					<li class="nav-item"><a href="/">Home</a></li>
+					<li class="nav-item"><a href="/blog/">Archive</a></li>
+					<li class="nav-item"><a href="/about/">About</a></li>
+					<li class="nav-item"><a href="/feed/feed.xml">Feed</a></li>
 				</ul>
 			</nav>
 		</header>
@@ -478,11 +478,11 @@ header {
 
 <ul class="post-metadata">
 	<li><time datetime="2025-11-25">25 November 2025</time></li>
-	<li><a href="/crashed-out/tags/ai/" class="post-tag">ai</a>, </li>
-	<li><a href="/crashed-out/tags/agents/" class="post-tag">agents</a>, </li>
-	<li><a href="/crashed-out/tags/sim-ai/" class="post-tag">sim.ai</a>, </li>
-	<li><a href="/crashed-out/tags/vulnerability/" class="post-tag">vulnerability</a>, </li>
-	<li><a href="/crashed-out/tags/prompt-injection/" class="post-tag">prompt injection</a></li>
+	<li><a href="/tags/ai/" class="post-tag">ai</a>, </li>
+	<li><a href="/tags/agents/" class="post-tag">agents</a>, </li>
+	<li><a href="/tags/sim-ai/" class="post-tag">sim.ai</a>, </li>
+	<li><a href="/tags/vulnerability/" class="post-tag">vulnerability</a>, </li>
+	<li><a href="/tags/prompt-injection/" class="post-tag">prompt injection</a></li>
 </ul>
 
 <p>Ok so I've been seeing a lot of stuff on prompt injection. From papers, to ctfs. But I haven't seen any in the wild.</p>
@@ -490,7 +490,7 @@ header {
 <p>How easy is to make an agent that's accidentally vulnerable to prompt injection?</p>
 <p>Recently I came across a platform called sim.ai. It's a no code solution to make agents that do... stuff? It's supposed to make it easy to make agents. There's a lot of in-app tool options but most of them seem to be behind an api pay wall. However, if you have some experience in beating applications until they work you can set up a very limited, self hosted, dev server. And I stress, limited, because again it seems like most of the functionality is pay walled behind cloud-only APIs.</p>
 <p>One you get sim running locally (good luck, it sucks, <a href="https://github.com/simstudioai/sim/issues/1726">see my post here on this issue.</a>) we can construct a basic chat bot that has some memory.</p>
-<p><picture><source type="image/avif" srcset="/crashed-out/blog/11_25_25/post/D5johoUiwx-2034.avif 2034w"><source type="image/webp" srcset="/crashed-out/blog/11_25_25/post/D5johoUiwx-2034.webp 2034w"><img loading="lazy" decoding="async" src="/crashed-out/blog/11_25_25/post/D5johoUiwx-2034.png" alt="Image" width="2034" height="524"></picture></p>
+<p><picture><source type="image/avif" srcset="/blog/11_25_25/post/D5johoUiwx-2034.avif 2034w"><source type="image/webp" srcset="/blog/11_25_25/post/D5johoUiwx-2034.webp 2034w"><img loading="lazy" decoding="async" src="/blog/11_25_25/post/D5johoUiwx-2034.png" alt="Image" width="2034" height="524"></picture></p>
 <p>Memory is an important part of a chat bot. Usually this will include chat history, but a lot of other stuff gets folded into memory. Output from MCP tools, snippets from documents, system and user prompts, and anything else the agent needs for context.</p>
 <p>This provides a lot of different opportunities to place a prompt injection. Maybe a maldoc that gets folded into the document embedding database, or maybe over multiple messages the course of the chat history, or a stealthy mcp server with embedded prompts.</p>
 <p>Consider this system prompt:</p>
@@ -549,7 +549,7 @@ Unfortunately, since this is the first message <span class="token keyword">in</s
 <li>hallucination detection (looks like it does RAG lookups to double check responses)</li>
 <li>PII detection (looks like it uses <a href="https://microsoft.github.io/presidio/">presidio</a>)</li>
 </ul>
-<p><picture><source type="image/avif" srcset="/crashed-out/blog/11_25_25/post/NSGxeCt-lU-256.avif 256w"><source type="image/webp" srcset="/crashed-out/blog/11_25_25/post/NSGxeCt-lU-256.webp 256w"><img loading="lazy" decoding="async" src="/crashed-out/blog/11_25_25/post/NSGxeCt-lU-256.png" alt="Image" width="256" height="596"></picture></p>
+<p><picture><source type="image/avif" srcset="/blog/11_25_25/post/NSGxeCt-lU-256.avif 256w"><source type="image/webp" srcset="/blog/11_25_25/post/NSGxeCt-lU-256.webp 256w"><img loading="lazy" decoding="async" src="/blog/11_25_25/post/NSGxeCt-lU-256.png" alt="Image" width="256" height="596"></picture></p>
 <p>This might be a false sense of security. I have serious doubts how this feature works.</p>
 <p>Suppose we have the system prompt:</p>
 <pre class="language-sh" tabindex="0"><code class="language-sh">You are a general chatbot that provides informative responses to questions. 
@@ -568,14 +568,14 @@ Chat History:
 <p>Hard to say, AI systems aren't deterministic.</p>
 <p>I'd love to test it <a href="https://github.com/simstudioai/sim/issues/2125">if I could get it to work.</a></p>
 <p>Or if your local model is an idiot like llama3.2 it'll just give you the secret.</p>
-<p><picture><source type="image/avif" srcset="/crashed-out/blog/11_25_25/post/FkeKzrSuZu-518.avif 518w"><source type="image/webp" srcset="/crashed-out/blog/11_25_25/post/FkeKzrSuZu-518.webp 518w"><img loading="lazy" decoding="async" src="/crashed-out/blog/11_25_25/post/FkeKzrSuZu-518.png" alt="Image" width="518" height="635"></picture></p>
+<p><picture><source type="image/avif" srcset="/blog/11_25_25/post/FkeKzrSuZu-518.avif 518w"><source type="image/webp" srcset="/blog/11_25_25/post/FkeKzrSuZu-518.webp 518w"><img loading="lazy" decoding="async" src="/blog/11_25_25/post/FkeKzrSuZu-518.png" alt="Image" width="518" height="635"></picture></p>
 <p>Check out these by the way:</p>
 <ul>
 <li><a href="https://www.wiz.io/blog/prompt-airlines-ai-security-challenge">Prompt Airlines CTF</a></li>
 <li><a href="https://gandalf.lakera.ai/baseline">gandalf CTF</a></li>
 </ul>
 
-<ul class="links-nextprev"><li class="links-nextprev-prev">← Previous<br> <a href="/crashed-out/blog/11_7_25/post/">queen city</a></li>
+<ul class="links-nextprev"><li class="links-nextprev-prev">← Previous<br> <a href="/blog/11_7_25/post/">queen city</a></li>
 </ul>
 
 			</heading-anchors>
@@ -584,7 +584,7 @@ Chat History:
 		<footer>
 		</footer>
 
-		<!-- This page `/blog/11_25_25/post/` was built on 2025-12-03T23:01:48.361Z -->
-		<script type="module" src="/crashed-out/dist/cC8wS6ZjFU.js"></script>
+		<!-- This page `/blog/11_25_25/post/` was built on 2025-12-03T23:09:41.675Z -->
+		<script type="module" src="/dist/cC8wS6ZjFU.js"></script>
 	</body>
 </html>

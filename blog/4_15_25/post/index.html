@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>identifying grapth flattening</title>
 		<meta name="description" content="using miasm to explore a sample and find flattened cfg">
-		<link rel="alternate" href="/crashed-out/feed/feed.xml" type="application/atom+xml" title="Crashed Out">
+		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="Crashed Out">
 		
 		<style>/**
  * okaidia theme for JavaScript, CSS and HTML
@@ -459,14 +459,14 @@ header {
 		<a href="#skip" class="visually-hidden">Skip to main content</a>
 
 		<header>
-			<a href="/crashed-out/" class="home-link">Crashed Out</a>
+			<a href="/" class="home-link">Crashed Out</a>
 			<nav>
 				<h2 class="visually-hidden" id="top-level-navigation-menu">Top level navigation menu</h2>
 				<ul class="nav">
-					<li class="nav-item"><a href="/crashed-out/">Home</a></li>
-					<li class="nav-item"><a href="/crashed-out/blog/">Archive</a></li>
-					<li class="nav-item"><a href="/crashed-out/about/">About</a></li>
-					<li class="nav-item"><a href="/crashed-out/feed/feed.xml">Feed</a></li>
+					<li class="nav-item"><a href="/">Home</a></li>
+					<li class="nav-item"><a href="/blog/">Archive</a></li>
+					<li class="nav-item"><a href="/about/">About</a></li>
+					<li class="nav-item"><a href="/feed/feed.xml">Feed</a></li>
 				</ul>
 			</nav>
 		</header>
@@ -478,9 +478,9 @@ header {
 
 <ul class="post-metadata">
 	<li><time datetime="2025-04-15">15 April 2025</time></li>
-	<li><a href="/crashed-out/tags/miasm/" class="post-tag">MIASM</a>, </li>
-	<li><a href="/crashed-out/tags/deobfuscation/" class="post-tag">deobfuscation</a>, </li>
-	<li><a href="/crashed-out/tags/graph-flattening/" class="post-tag">graph-flattening</a></li>
+	<li><a href="/tags/miasm/" class="post-tag">MIASM</a>, </li>
+	<li><a href="/tags/deobfuscation/" class="post-tag">deobfuscation</a>, </li>
+	<li><a href="/tags/graph-flattening/" class="post-tag">graph-flattening</a></li>
 </ul>
 
 <p>Grapth flattening is a means of obscuring the flow of execution to prevent static review of reverse engineered code. Lets take a look at how to identify when control grapth flattening is being used.</p>
@@ -597,7 +597,7 @@ asm_cfg<span class="token operator">=</span>mdis<span class="token punctuation">
 dot <span class="token operator">=</span> asm_cfg<span class="token punctuation">.</span>dot<span class="token punctuation">(</span><span class="token punctuation">)</span>
 gvz<span class="token operator">=</span>graphviz<span class="token punctuation">.</span>Source<span class="token punctuation">(</span>dot<span class="token punctuation">)</span>
 display<span class="token punctuation">(</span>gvz<span class="token punctuation">)</span></code></pre>
-<p><picture><source type="image/avif" srcset="/crashed-out/blog/4_15_25/post/YU5OnC168T-449.avif 449w"><source type="image/webp" srcset="/crashed-out/blog/4_15_25/post/YU5OnC168T-449.webp 449w"><img loading="lazy" decoding="async" src="/crashed-out/blog/4_15_25/post/YU5OnC168T-449.svg" alt="alt text" width="449" height="761"></picture></p>
+<p><picture><source type="image/avif" srcset="/blog/4_15_25/post/YU5OnC168T-449.avif 449w"><source type="image/webp" srcset="/blog/4_15_25/post/YU5OnC168T-449.webp 449w"><img loading="lazy" decoding="async" src="/blog/4_15_25/post/YU5OnC168T-449.svg" alt="alt text" width="449" height="761"></picture></p>
 <p>Start with looking at calls and long jumps.</p>
 <pre class="language-python" tabindex="0"><code class="language-python">offset<span class="token operator">=</span><span class="token number">0x4063f0</span>
 
@@ -613,7 +613,7 @@ gvz<span class="token operator">=</span>graphviz<span class="token punctuation">
 gvz<span class="token punctuation">.</span>save<span class="token punctuation">(</span><span class="token string">"./flat_grapth.dot"</span><span class="token punctuation">)</span>
 
 result<span class="token operator">=</span>subprocess<span class="token punctuation">.</span>run<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">"dot"</span><span class="token punctuation">,</span> <span class="token string">"-Tsvg"</span><span class="token punctuation">,</span> <span class="token string">"flat_grapth.dot"</span><span class="token punctuation">,</span> <span class="token string">"-o"</span><span class="token punctuation">,</span> <span class="token string">"flat_graph.svg"</span><span class="token punctuation">]</span><span class="token punctuation">)</span></code></pre>
-<p><picture><source type="image/avif" srcset="/crashed-out/blog/4_15_25/post/SY8BR94uD2-13597.avif 13597w"><source type="image/webp" srcset="/crashed-out/blog/4_15_25/post/SY8BR94uD2-13597.webp 13597w"><img loading="lazy" decoding="async" src="/crashed-out/blog/4_15_25/post/SY8BR94uD2-13597.png" alt="alt text" width="13597" height="7335"></picture></p>
+<p><picture><source type="image/avif" srcset="/blog/4_15_25/post/SY8BR94uD2-13597.avif 13597w"><source type="image/webp" srcset="/blog/4_15_25/post/SY8BR94uD2-13597.webp 13597w"><img loading="lazy" decoding="async" src="/blog/4_15_25/post/SY8BR94uD2-13597.png" alt="alt text" width="13597" height="7335"></picture></p>
 <p>This CFG is &quot;flattened&quot; and highly complex. Which block runs is determined by a state variable-- a value in EAX.</p>
 <p>We can determine the order of basic blocks by just running the code, or build some kind of solver to trace it statically, which we can discuss in the later posts.</p>
 <h2 id="sources">sources</h2>
@@ -621,7 +621,7 @@ result<span class="token operator">=</span>subprocess<span class="token punctuat
 <p>https://infosecadalid.com/2021/08/27/my-introduction-to-z3-and-solving-satisfiability-problems/</p>
 <p>https://github.com/mrphrazer/obfuscation_detection/tree/main/examples</p>
 
-<ul class="links-nextprev"><li class="links-nextprev-prev">← Previous<br> <a href="/crashed-out/blog/9_1_25/post/">simple analysis</a></li><li class="links-nextprev-next">Next →<br><a href="/crashed-out/blog/8_20_25/post/">visual binary</a></li>
+<ul class="links-nextprev"><li class="links-nextprev-prev">← Previous<br> <a href="/blog/9_1_25/post/">simple analysis</a></li><li class="links-nextprev-next">Next →<br><a href="/blog/8_20_25/post/">visual binary</a></li>
 </ul>
 
 			</heading-anchors>
@@ -630,7 +630,7 @@ result<span class="token operator">=</span>subprocess<span class="token punctuat
 		<footer>
 		</footer>
 
-		<!-- This page `/blog/4_15_25/post/` was built on 2025-12-03T23:01:48.361Z -->
-		<script type="module" src="/crashed-out/dist/cC8wS6ZjFU.js"></script>
+		<!-- This page `/blog/4_15_25/post/` was built on 2025-12-03T23:09:41.677Z -->
+		<script type="module" src="/dist/cC8wS6ZjFU.js"></script>
 	</body>
 </html>

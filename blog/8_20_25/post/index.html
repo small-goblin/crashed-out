@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>visual binary</title>
 		<meta name="description" content="Visually peeking at the content of binary data">
-		<link rel="alternate" href="/crashed-out/feed/feed.xml" type="application/atom+xml" title="Crashed Out">
+		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="Crashed Out">
 		
 		<style>/**
  * okaidia theme for JavaScript, CSS and HTML
@@ -459,14 +459,14 @@ header {
 		<a href="#skip" class="visually-hidden">Skip to main content</a>
 
 		<header>
-			<a href="/crashed-out/" class="home-link">Crashed Out</a>
+			<a href="/" class="home-link">Crashed Out</a>
 			<nav>
 				<h2 class="visually-hidden" id="top-level-navigation-menu">Top level navigation menu</h2>
 				<ul class="nav">
-					<li class="nav-item"><a href="/crashed-out/">Home</a></li>
-					<li class="nav-item"><a href="/crashed-out/blog/">Archive</a></li>
-					<li class="nav-item"><a href="/crashed-out/about/">About</a></li>
-					<li class="nav-item"><a href="/crashed-out/feed/feed.xml">Feed</a></li>
+					<li class="nav-item"><a href="/">Home</a></li>
+					<li class="nav-item"><a href="/blog/">Archive</a></li>
+					<li class="nav-item"><a href="/about/">About</a></li>
+					<li class="nav-item"><a href="/feed/feed.xml">Feed</a></li>
 				</ul>
 			</nav>
 		</header>
@@ -478,30 +478,30 @@ header {
 
 <ul class="post-metadata">
 	<li><time datetime="2025-08-20">20 August 2025</time></li>
-	<li><a href="/crashed-out/tags/page-turner/" class="post-tag">page turner</a>, </li>
-	<li><a href="/crashed-out/tags/re/" class="post-tag">RE</a></li>
+	<li><a href="/tags/page-turner/" class="post-tag">page turner</a>, </li>
+	<li><a href="/tags/re/" class="post-tag">RE</a></li>
 </ul>
 
 <p>There is something appealing about thinking of binary data as having &quot;primitives.&quot; If this is true, they should have patterns, and we should be able to visually distinguish these primitives. In the same way we can distinguish color primitives like red and blue. Enter binvis. The human brain is pretty good at spotting patterns and visually reasoning, so this technique is claimed to be more intuitive than reading hex dumps.</p>
 <h2 id="do-i-look-like-i-know-what-a-jpg-is">Do I Look Like I Know What a JPG Is?</h2>
 <p>Let's take a look at three JPGs, put through binvis...</p>
-<p><picture><source type="image/avif" srcset="/crashed-out/blog/8_20_25/post/znaQSDuWa0-1060.avif 1060w"><source type="image/webp" srcset="/crashed-out/blog/8_20_25/post/znaQSDuWa0-1060.webp 1060w"><img loading="lazy" decoding="async" src="/crashed-out/blog/8_20_25/post/znaQSDuWa0-1060.png" alt="Image" width="1060" height="4240"></picture><br>
-<picture><source type="image/avif" srcset="/crashed-out/blog/8_20_25/post/5YtxnsKuwN-1060.avif 1060w"><source type="image/webp" srcset="/crashed-out/blog/8_20_25/post/5YtxnsKuwN-1060.webp 1060w"><img loading="lazy" decoding="async" src="/crashed-out/blog/8_20_25/post/5YtxnsKuwN-1060.png" alt="Image" width="1060" height="4240"></picture><br>
-<picture><source type="image/avif" srcset="/crashed-out/blog/8_20_25/post/OH4P9xk5Y7-1060.avif 1060w"><source type="image/webp" srcset="/crashed-out/blog/8_20_25/post/OH4P9xk5Y7-1060.webp 1060w"><img loading="lazy" decoding="async" src="/crashed-out/blog/8_20_25/post/OH4P9xk5Y7-1060.png" alt="Image" width="1060" height="4240"></picture></p>
+<p><picture><source type="image/avif" srcset="/blog/8_20_25/post/znaQSDuWa0-1060.avif 1060w"><source type="image/webp" srcset="/blog/8_20_25/post/znaQSDuWa0-1060.webp 1060w"><img loading="lazy" decoding="async" src="/blog/8_20_25/post/znaQSDuWa0-1060.png" alt="Image" width="1060" height="4240"></picture><br>
+<picture><source type="image/avif" srcset="/blog/8_20_25/post/5YtxnsKuwN-1060.avif 1060w"><source type="image/webp" srcset="/blog/8_20_25/post/5YtxnsKuwN-1060.webp 1060w"><img loading="lazy" decoding="async" src="/blog/8_20_25/post/5YtxnsKuwN-1060.png" alt="Image" width="1060" height="4240"></picture><br>
+<picture><source type="image/avif" srcset="/blog/8_20_25/post/OH4P9xk5Y7-1060.avif 1060w"><source type="image/webp" srcset="/blog/8_20_25/post/OH4P9xk5Y7-1060.webp 1060w"><img loading="lazy" decoding="async" src="/blog/8_20_25/post/OH4P9xk5Y7-1060.png" alt="Image" width="1060" height="4240"></picture></p>
 <p>These look... similar... but let's compare them to a PNG.</p>
-<p><picture><source type="image/avif" srcset="/crashed-out/blog/8_20_25/post/yU6W2F7jab-1060.avif 1060w"><source type="image/webp" srcset="/crashed-out/blog/8_20_25/post/yU6W2F7jab-1060.webp 1060w"><img loading="lazy" decoding="async" src="/crashed-out/blog/8_20_25/post/yU6W2F7jab-1060.png" alt="Image" width="1060" height="4240"></picture></p>
+<p><picture><source type="image/avif" srcset="/blog/8_20_25/post/yU6W2F7jab-1060.avif 1060w"><source type="image/webp" srcset="/blog/8_20_25/post/yU6W2F7jab-1060.webp 1060w"><img loading="lazy" decoding="async" src="/blog/8_20_25/post/yU6W2F7jab-1060.png" alt="Image" width="1060" height="4240"></picture></p>
 <p>Still looks mostly the same, but a pattern emerges. Let's compare this to another primitive: text.</p>
-<p><picture><source type="image/avif" srcset="/crashed-out/blog/8_20_25/post/TioZmP6U71-1060.avif 1060w"><source type="image/webp" srcset="/crashed-out/blog/8_20_25/post/TioZmP6U71-1060.webp 1060w"><img loading="lazy" decoding="async" src="/crashed-out/blog/8_20_25/post/TioZmP6U71-1060.png" alt="Image" width="1060" height="4240"></picture></p>
+<p><picture><source type="image/avif" srcset="/blog/8_20_25/post/TioZmP6U71-1060.avif 1060w"><source type="image/webp" srcset="/blog/8_20_25/post/TioZmP6U71-1060.webp 1060w"><img loading="lazy" decoding="async" src="/blog/8_20_25/post/TioZmP6U71-1060.png" alt="Image" width="1060" height="4240"></picture></p>
 <p>All blue. Okay, we see a pattern: what appears to be a header and then actual image data in the JPGs' binvis output. Text is a sea of blue. We can assume ELF files, code, compressed data, all have their own patterns.</p>
 <h2 id="sniffing-for-text">Sniffing for Text</h2>
 <p>Let's hide some text in a BMP image, then see if we can visually find this text using binvis.</p>
 <p>First, let's look at the binvis output of the BMP before we modify it.</p>
-<p><picture><source type="image/avif" srcset="/crashed-out/blog/8_20_25/post/v6SFobvTfu-264.avif 264w"><source type="image/webp" srcset="/crashed-out/blog/8_20_25/post/v6SFobvTfu-264.webp 264w"><img loading="lazy" decoding="async" src="/crashed-out/blog/8_20_25/post/v6SFobvTfu-264.png" alt="Image" width="264" height="1056"></picture></p>
+<p><picture><source type="image/avif" srcset="/blog/8_20_25/post/v6SFobvTfu-264.avif 264w"><source type="image/webp" srcset="/blog/8_20_25/post/v6SFobvTfu-264.webp 264w"><img loading="lazy" decoding="async" src="/blog/8_20_25/post/v6SFobvTfu-264.png" alt="Image" width="264" height="1056"></picture></p>
 <p>There is a very clear pattern to this data, so this becomes our baseline for BMP image primitives.</p>
 <p>We can hide the hex sequence <code>66 6C 61 67 7B 6E 6F 77 5F 79 6F 75 5F 73 65 65 5F 6D 65 7D</code> somewhere in the file, which is just ASCII <code>flag{now_you_see_me}</code>.</p>
-<p><picture><source type="image/avif" srcset="/crashed-out/blog/8_20_25/post/DZxZLeRhMS-572.avif 572w"><source type="image/webp" srcset="/crashed-out/blog/8_20_25/post/DZxZLeRhMS-572.webp 572w"><img loading="lazy" decoding="async" src="/crashed-out/blog/8_20_25/post/DZxZLeRhMS-572.png" alt="Image" width="572" height="60"></picture></p>
+<p><picture><source type="image/avif" srcset="/blog/8_20_25/post/DZxZLeRhMS-572.avif 572w"><source type="image/webp" srcset="/blog/8_20_25/post/DZxZLeRhMS-572.webp 572w"><img loading="lazy" decoding="async" src="/blog/8_20_25/post/DZxZLeRhMS-572.png" alt="Image" width="572" height="60"></picture></p>
 <p>If we check the BMP in binvis again, we'll see an aberration in the pattern—a small blue island—which is our flag. The patterns of two different binary primitives clash!</p>
-<p><picture><source type="image/avif" srcset="/crashed-out/blog/8_20_25/post/z2WD40QWiP-218.avif 218w"><source type="image/webp" srcset="/crashed-out/blog/8_20_25/post/z2WD40QWiP-218.webp 218w"><img loading="lazy" decoding="async" src="/crashed-out/blog/8_20_25/post/z2WD40QWiP-218.png" alt="Image" width="218" height="578"></picture></p>
+<p><picture><source type="image/avif" srcset="/blog/8_20_25/post/z2WD40QWiP-218.avif 218w"><source type="image/webp" srcset="/blog/8_20_25/post/z2WD40QWiP-218.webp 218w"><img loading="lazy" decoding="async" src="/blog/8_20_25/post/z2WD40QWiP-218.png" alt="Image" width="218" height="578"></picture></p>
 <p>The flag is small and visually it doesn't make much of an impact, so it could be easy to miss. However, this is a very trivial example. Embedding a lot of text in the image would show a much larger visual disruption. Most data you'd want to hide would be larger than a couple of bytes.</p>
 <h2 id="additional-thoughts">Additional Thoughts</h2>
 <p>How do we defeat a tool like this? Camouflage, possibly. When embedding primitives, it could be possible to encode them as another primitive or align the data in such a way that it matches the pattern of the primary primitive.</p>
@@ -520,7 +520,7 @@ header {
 I wanted to make a research blog, but then only ever made one post. So I'm going to make an effort to summarize some papers once in a while under the tag &quot;page turner&quot;.</p>
 </blockquote>
 
-<ul class="links-nextprev"><li class="links-nextprev-prev">← Previous<br> <a href="/crashed-out/blog/4_15_25/post/">identifying grapth flattening</a></li><li class="links-nextprev-next">Next →<br><a href="/crashed-out/blog/11_7_25/post/">queen city</a></li>
+<ul class="links-nextprev"><li class="links-nextprev-prev">← Previous<br> <a href="/blog/4_15_25/post/">identifying grapth flattening</a></li><li class="links-nextprev-next">Next →<br><a href="/blog/11_7_25/post/">queen city</a></li>
 </ul>
 
 			</heading-anchors>
@@ -529,7 +529,7 @@ I wanted to make a research blog, but then only ever made one post. So I'm going
 		<footer>
 		</footer>
 
-		<!-- This page `/blog/8_20_25/post/` was built on 2025-12-03T23:01:48.361Z -->
-		<script type="module" src="/crashed-out/dist/cC8wS6ZjFU.js"></script>
+		<!-- This page `/blog/8_20_25/post/` was built on 2025-12-03T23:09:41.678Z -->
+		<script type="module" src="/dist/cC8wS6ZjFU.js"></script>
 	</body>
 </html>
